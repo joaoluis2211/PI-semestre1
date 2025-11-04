@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (!empty($_SESSION['login_error'])) {
+    $msg = htmlspecialchars($_SESSION['login_error'], ENT_QUOTES, 'UTF-8');
+    echo "<div class=\"alert alert-danger\">{$msg}</div>"; // ajuste classes/HTML conforme seu layout
+    unset($_SESSION['login_error']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -33,10 +43,10 @@
   <main class="min-h-screen flex items-center justify-center">
     <section class="bg-white px-10 py-6 rounded-lg border-2 shadow-xl w-full max-w-xl text-center">
       <header class="mb-4">
-        <img src="assets/logo-sem-fundo.png" alt="Logo do sistema Eleja" class="mx-auto w-40" />
+        <img src="../../../assets/logo-sem-fundo.png" alt="Logo do sistema Eleja" class="mx-auto w-40" />
       </header>
 
-      <form action="index.html" method="post" class="text-left border px-8 py-6 rounded-lg shadow-md">
+      <form action="/PI-semestre1/cadastrar.php" method="post" class="text-left border px-8 py-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-semibold mb-4 text-center">Cadastrar</h1>
 
         <label for="nome" class="block mb-1">Nome:</label>
@@ -45,9 +55,9 @@
 
         <label for="curso" class="block mb-1">Curso:</label>
         <select class="w-full px-4 py-3 border border-gray-300 rounded mb-4" name="curso">
-            <option value="desenvolvimento de software multiplataforma">Desenvolvimento de Software Multiplataforma</option>
-            <option value="gestao de producao industrial">Gestão de Produção Industrial</option>
-            <option value="gestao empresarial">Gestão Empresarial</option>
+            <option value="Desenvolvimento de Software Multiplataforma">Desenvolvimento de Software Multiplataforma</option>
+            <option value="Gestão de Produção Industrial">Gestão de Produção Industrial</option>
+            <option value="Gestão Empresarial">Gestão Empresarial</option>
         </select>
         
         <label for="periodo" class="block mb-1">Período:</label>
@@ -62,7 +72,7 @@
         <input type="password" id="senha" name="senha" required
           class="w-full px-4 py-2 border border-gray-300 rounded mb-4" />
 
-        <button type="button" class="cadastrar w-full bg-[#b20000] hover:bg-red-500 text-white font-semibold py-3 rounded mb-4">CADASTRAR</button>
+        <button type="submit" class="w-full bg-[#b20000] hover:bg-red-500 text-white font-semibold py-3 rounded mb-4">CADASTRAR</button>
       </form>
 
       <footer class="mt-6">
@@ -70,6 +80,6 @@
       </footer>
     </section>
   </main>
-  <script src="/script.js"></script>
+  <script src="/PI-semestre1/public/js/script.js"></script>
 </body>
 </html>

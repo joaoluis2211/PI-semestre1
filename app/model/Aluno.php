@@ -3,14 +3,8 @@
 class Aluno {
     private int $id;
     private string $nome;
-    private Turma $turma;
+    private int $idturma;
 
-    public function __construct(int $id, string $nome, Turma $turma)
-    {
-        $this->id = $id;
-        $this->nome = $nome;
-        $this->turma = $turma;
-    }
 
     public function getId(): int
     {
@@ -22,8 +16,18 @@ class Aluno {
         return $this->nome;
     }
 
-    public function getTurma(): Turma
+    public function setNome(string $nome): void
     {
-        return $this->turma;
+        $this->nome = $nome;
+    }
+
+    public function getIdturma(): int
+    {
+        return $this->idturma;
+    }
+
+    public function setIdturma(int $idturma): void
+    {
+        $this->idturma = $idturma;
     }
 }

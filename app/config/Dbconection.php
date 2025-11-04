@@ -12,7 +12,7 @@ class Database
     private function connect()
     {
         $this->host = 'localhost';
-        $this->dbname = 'test';
+        $this->dbname = 'eleja';
         $this->user = 'root';
         $this->pass = '';
         
@@ -32,9 +32,14 @@ class Database
 
     public function getConnection()
     {
-        if ($this->pdo === null) {
-            $this->connect();
+        try {
+            if ($this->pdo === null) {
+                $this->connect();
+            }
+            return $this->pdo;
+        } catch (\Throwable $th) {
+            throw $th;
+            error_log("Erro na conexão com o banco de dados: " . $th->getMessage());
         }
-        return $this->pdo;
     }
 }

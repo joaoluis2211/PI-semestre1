@@ -247,20 +247,32 @@ function excluirVotacao() {
 })
 }
 
-const btnCadastrar = document.querySelectorAll('.cadastrar')
-btnCadastrar.forEach(button => {
-    button.addEventListener('click', (e) =>{
-        e.preventDefault(); // Impede o envio imediato do formulário
+document.addEventListener('DOMContentLoaded', () => {
+  const btnCadastrar = document.querySelectorAll('.cadastrar');
+  btnCadastrar.forEach(button => {
+    const form = button.closest('form');
+    if (!form) return;
 
-        Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Cadastro realizado com sucesso!",
-            showConfirmButton: false,
-            timer: 1500
-        }).then(() => {
-            // Redireciona após o alerta
-            window.location.href = "../index.html";
-        });
+    // garante tipo e action fallback absoluto
+    button.type = 'button';
+    if (!form.action || form.action.includes('app/view')) {
+      form.action = `${window.location.origin}/cadastrar.php`;
+      console.log('[cadastrar] form.action definido:', form.action);
+    }
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Cadastro realizado com sucesso!",
+        showConfirmButton: false,
+        timer: 1500
+      }).then(() => {
+        // submete o form (em vez de redirecionar manualmente)
+        form.submit();
+      });
     });
+  });
 });

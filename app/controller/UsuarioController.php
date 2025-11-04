@@ -1,31 +1,38 @@
 <?php
-require_once 'app/config/Dbconection.php';
-require_once 'app/model/Usuario.php';
+require_once __DIR__ . '/../config/UsuarioDAO.php';
+require_once __DIR__ . '/../model/Usuario.php';
 
 class UsuarioController {
-    public static function cadastrar(string $email, string $senha, string $tipo, int $id_aluno){
+    private $usuarioDAO;
+    public function __construct() {
+        $this->usuarioDAO = new UsuarioDAO();
+    }
+
+    public function cadastrar(Usuario $usuario){
         try {
-            UsuarioDAO.cadastrarUsuario($email, $senha, $tipo, $id_aluno);
+            $this->usuarioDAO->cadastrarUsuario($usuario);
         } catch (Exception $e) {
             error_log("Erro ao cadastrar usuário: " . $e->getMessage());
         }
     }
 
-    public static function login(string $email, string $senha){
+    public function login(Usuario $usuario){
         try {
-            UsuarioDAO.iniciarSessao($email, $senha);
+            $user = $this->usuarioDAO->iniciarSessao($usuario);
+            if (!$user) {
+                throw new Exception('Usuário não encontrado');
+            }
+            return $user;
         } catch (Exception $e) {
             error_log("Erro ao iniciar sessão: " . $e->getMessage());
         }
     }
 
-    public static function logout(){
+    public function logout(Usuario $usuario){
         try {
-            UsuarioDAO.fecharSessao();
+            $this->usuarioDAO->fecharSessao($usuario);
         } catch (Exception $e) {
             error_log("Erro ao encerrar sessão: " . $e->getMessage());
         }
     }
-
-
 }

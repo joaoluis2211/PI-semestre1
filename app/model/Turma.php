@@ -5,12 +5,6 @@ class Turma {
     private string $periodo;
     private string $curso;
 
-    public function __construct(int $id, string $periodo, string $curso)
-    {
-        $this->id = $id;
-        $this->periodo = $periodo;
-        $this->curso = $curso;
-    }
 
     public function getId(): int
     {
@@ -20,6 +14,16 @@ class Turma {
     public function getPeriodo(): string
     {
         return $this->periodo;
+    }
+
+    public function setPeriodo(string $periodo): void
+    {
+        $this->periodo = $periodo;
+    }
+    
+    public function setCurso(string $curso): void
+    {
+        $this->curso = $curso;
     }
 
     public function getCurso(): string

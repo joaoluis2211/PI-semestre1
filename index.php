@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!empty($_SESSION['login_error'])) {
+    $msg = htmlspecialchars($_SESSION['login_error'], ENT_QUOTES, 'UTF-8');
+    echo "<div class=\"alert alert-danger\">{$msg}</div>"; // ajuste classes/HTML conforme seu layout
+    unset($_SESSION['login_error']);
+} elseif (!empty($_SESSION['login_success'])) {
+    $msg = htmlspecialchars($_SESSION['login_success'], ENT_QUOTES, 'UTF-8');
+    echo "<div class=\"alert alert-success\">{$msg}</div>"; // ajuste classes/HTML conforme seu layout
+    unset($_SESSION['login_success']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -47,7 +61,7 @@
         <a href="#" class="text-sm font-semibold text-[#b20000] hover:underline block mb-4">Esqueceu sua senha?</a>
 
         <button type="submit" class="w-full bg-[#b20000] hover:bg-red-500 text-white font-semibold py-3 rounded mb-4">ENTRAR</button>
-        <a href="cadastrar.html"><button type="button" class="w-full bg-[#091113] text-white hover:bg-opacity-90 font-semibold py-3 rounded">CADASTRAR-SE</button></a>
+        <a href="app/view/usuario/cadastrarView.php"><button type="button" class="w-full bg-[#091113] text-white hover:bg-opacity-90 font-semibold py-3 rounded">CADASTRAR-SE</button></a>
       </form>
 
       <footer class="mt-6">
