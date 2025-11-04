@@ -8,12 +8,18 @@ class UsuarioDAO {
         $this->db = new Database();
     }
     public function cadastrarUsuario(Usuario $usuario){
+        try {
+            $conn = $this->db->getConnection();
+            $sql = "INSERT INTO usuarios (email, senha, tipo, idaluno) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$usuario->getEmail(), $usuario->getSenha(), $usuario->getTipo(), $usuario->getIdaluno()]);
+            return true;
+        } catch (\Throwable $th) {
+            error_log('Cadastrar usuário error: ' . $th->getMessage());
+            return false;
+        }
         // Implementar lógica para cadastrar usuário no banco de dados
-        $conn = $this->db->getConnection();
-        $sql = "INSERT INTO usuarios (email, senha, tipo, id_aluno) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$usuario->getEmail(), $usuario->getSenha(), $usuario->getTipo(), $usuario->getIdAluno()]);
-        $stmt->close();
+        
     }
 
     public function iniciarSessao(Usuario $usuario){
@@ -24,11 +30,11 @@ class UsuarioDAO {
             $stmt = $this->db->getConnection()->prepare($sql);
             $stmt->execute([$usuario->getEmail()]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $user;
         } catch (Exception $e) {
             error_log('Iniciar sessão error: ' . $e->getMessage());
             return null;
         }
-        return $user;
     }
 
     public function fecharSessao(){

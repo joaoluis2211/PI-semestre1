@@ -15,21 +15,25 @@ try {
 
         $usuarioController = new UsuarioController();
         $user = $usuarioController->login($usuario);
+        if ($user) {
+            $_SESSION['user'] = [
+                'id' => $user['idusuario'],
+                'email' => $user['email'],
+                'tipo' => $user['tipo']
+            ];
+        }else{
+            $_SESSION['login_error'] = 'E‑mail ou senha inválidos.';
+            header('Location: index.php');
+            exit;
+        }
 
         // Redirecionar para área do usuário / admin
-        if ($user['tipo'] === 'administrador') {
+        if ($_SESSION['user']['tipo'] === 'administrador') {
             header('Location: app/view/admin/home_admin.html');
-        } else {
+        } elseif ($_SESSION['user']['tipo'] === 'aluno') {
             header('Location: app/view/usuario/home.html');
         }
         exit;
-        if (!$user) {
-        // Credenciais inválidas
-        // Você pode guardar mensagem na session e mostrar na index.php
-        $_SESSION['login_error'] = 'Matrícula ou senha inválida.';
-        header('Location: index.php');
-        exit;
-    }
 
 } catch (Exception $e) {
     error_log('Login error: ' . $e->getMessage());

@@ -16,7 +16,7 @@ $aluno->setNome(isset($_POST['nome']) ? trim($_POST['nome']) : '');
 
 $usuario->setEmail(isset($_POST['email']) ? trim($_POST['email']) : '');
 $usuario->setSenha(isset($_POST['senha']) ? $_POST['senha'] : '');
-$usuario->setTipo('Aluno');
+$usuario->setTipo('aluno');
 
 $turma->setCurso(isset($_POST['curso']) ? trim($_POST['curso']) : '');
 $turma->setPeriodo(isset($_POST['periodo']) ? (int)$_POST['periodo'] : 0);
@@ -44,15 +44,21 @@ try {
         $idturma = $turmaController->getTurma($turma);
         $aluno->setIdturma($idturma);
         $alunoController = new AlunoController();
-        $alunoController->cadastrar($aluno);
-        $idaluno = $alunoController->getAluno($aluno);
-        $usuario->setIdaluno($idaluno);
-        $usuarioController = new UsuarioController();
-        $usuarioController->cadastrar($usuario);
+        $resp = $alunoController->cadastrar($aluno);
+        if ($resp) {
+            $idaluno = $alunoController->getAluno($aluno);
+            $usuario->setIdaluno($idaluno);
+            $usuarioController = new UsuarioController();
+            $resp2 = $usuarioController->cadastrar($usuario);
+        }
+        if (!$resp || !$resp2) {
+            throw new Exception('Erro ao cadastrar usuário.');
+        }
+        
     }
 
     $_SESSION['login_success'] = 'Cadastro realizado com sucesso. Faça login.';
-    //header('Location: index.php');
+    header('Location: index.php');
     exit;
 } catch (Exception $e) {
     error_log('Cadastro error: ' . $e->getMessage());

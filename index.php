@@ -5,6 +5,10 @@ if (!empty($_SESSION['login_error'])) {
     $msg = htmlspecialchars($_SESSION['login_error'], ENT_QUOTES, 'UTF-8');
     echo "<div class=\"alert alert-danger\">{$msg}</div>"; // ajuste classes/HTML conforme seu layout
     unset($_SESSION['login_error']);
+} elseif (!empty($_SESSION['login_success'])) {
+    $msg = htmlspecialchars($_SESSION['login_success'], ENT_QUOTES, 'UTF-8');
+    echo "<div class=\"alert alert-success\">{$msg}</div>"; // ajuste classes/HTML conforme seu layout
+    unset($_SESSION['login_success']);
 }
 ?>
 

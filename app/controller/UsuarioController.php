@@ -22,12 +22,6 @@ class UsuarioController {
             if (!$user) {
                 throw new Exception('Usuário não encontrado');
             }
-            $_SESSION['user'] = [
-                'id' => $user['idusuario'],
-                'email' => $user['email'],
-                'tipo' => $user['tipo']
-            ];
-
             return $user;
         } catch (Exception $e) {
             error_log("Erro ao iniciar sessão: " . $e->getMessage());

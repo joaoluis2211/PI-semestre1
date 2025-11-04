@@ -7,11 +7,17 @@ class TurmaDAO{
         $this->db = new Database();
     }
     public function cadastrarTurma(Turma $turma){
-        $conn = $this->db->getConnection();
-        $sql = "INSERT INTO turma (periodo, curso) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$turma->getPeriodo(), $turma->getCurso()]);
-        $stmt->close();
+        try {
+            $conn = $this->db->getConnection();
+            $sql = "INSERT INTO turma (periodo, curso) VALUES (?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$turma->getPeriodo(), $turma->getCurso()]);
+            return true;
+        } catch (\Throwable $th) {
+            error_log('Cadastrar turma error: ' . $th->getMessage());
+            return false;
+        }
+        
     }
 
     public function localizarTurma(Turma $turma){

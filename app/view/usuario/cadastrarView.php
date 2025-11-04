@@ -72,7 +72,7 @@ if (!empty($_SESSION['login_error'])) {
         <input type="password" id="senha" name="senha" required
           class="w-full px-4 py-2 border border-gray-300 rounded mb-4" />
 
-        <button type="submit" class=" w-full bg-[#b20000] hover:bg-red-500 text-white font-semibold py-3 rounded mb-4">CADASTRAR</button>
+        <button type="submit" class="w-full bg-[#b20000] hover:bg-red-500 text-white font-semibold py-3 rounded mb-4">CADASTRAR</button>
       </form>
 
       <footer class="mt-6">
