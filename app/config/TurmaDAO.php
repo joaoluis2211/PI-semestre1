@@ -32,4 +32,17 @@ class TurmaDAO{
             return null;
         }
     }
+    
+    public function procurarTurma(int $idturma){
+        try {
+            $conn = $this->db->getConnection();
+            $stmt = $conn->prepare('SELECT * FROM turma WHERE idturma = ? LIMIT 1');
+            $stmt->execute($idturma);
+            $turma = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $turma;
+        } catch (Exception $e) {
+            error_log('Localizar turma error: ' . $e->getMessage());
+            return null;
+        }
+    }
 }

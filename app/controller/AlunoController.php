@@ -16,7 +16,7 @@ class AlunoController {
         }
     }
 
-    public function getAluno(Aluno $aluno){
+    public function getIdAluno(Aluno $aluno){
         try {
             return $this->alunoDAO->procurarAluno($aluno);
         } catch (Exception $e) {
@@ -25,4 +25,14 @@ class AlunoController {
         }
     }
 
+    public function atualizarTurma(Aluno $aluno, int $periodo){
+        try {
+            $periodo += 1;
+            $this->alunoDAO->updateTurma($aluno, $periodo);
+            return true;
+        } catch (Exception $e) {
+            error_log("Erro ao buscar turma: " . $e->getMessage());
+            return null;
+        }
+    }
 }

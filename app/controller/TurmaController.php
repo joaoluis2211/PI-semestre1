@@ -16,7 +16,7 @@ class TurmaController {
         }
     }
 
-    public function getTurma(Turma $turma){
+    public function getIdTurma(Turma $turma){
         try {
             return $this->turmaDAO->localizarTurma($turma);
         } catch (Exception $e) {
@@ -25,4 +25,12 @@ class TurmaController {
         }
     }
 
+    public function procurarTurma(int $idturma){
+        try {
+            return $this->turmaDAO->procurarTurma($idturma);
+        } catch (Exception $e) {
+            error_log("Erro ao buscar turma: " . $e->getMessage());
+            return null;
+        }
+    }
 }

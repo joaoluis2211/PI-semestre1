@@ -2,7 +2,7 @@
 
 class Turma {
     private int $id;
-    private string $periodo;
+    private int $periodo;
     private string $curso;
 
 
@@ -11,12 +11,12 @@ class Turma {
         return $this->id;
     }
 
-    public function getPeriodo(): string
+    public function getPeriodo(): int
     {
         return $this->periodo;
     }
 
-    public function setPeriodo(string $periodo): void
+    public function setPeriodo(int $periodo): void
     {
         $this->periodo = $periodo;
     }

@@ -41,20 +41,14 @@ try {
         exit;
     }else{
         $turmaController = new TurmaController();
-        $idturma = $turmaController->getTurma($turma);
+        $idturma = $turmaController->getIdTurma($turma);
         $aluno->setIdturma($idturma);
         $alunoController = new AlunoController();
-        $resp = $alunoController->cadastrar($aluno);
-        if ($resp) {
-            $idaluno = $alunoController->getAluno($aluno);
-            $usuario->setIdaluno($idaluno);
-            $usuarioController = new UsuarioController();
-            $resp2 = $usuarioController->cadastrar($usuario);
-        }
-        if (!$resp || !$resp2) {
-            throw new Exception('Erro ao cadastrar usuário.');
-        }
-        
+        $alunoController->cadastrar($aluno);
+        $idaluno = $alunoController->getIdAluno($aluno);
+        $usuario->setIdaluno($idaluno);
+        $usuarioController = new UsuarioController();
+        $usuarioController->cadastrar($usuario);
     }
 
     $_SESSION['login_success'] = 'Cadastro realizado com sucesso. Faça login.';

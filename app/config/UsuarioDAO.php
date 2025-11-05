@@ -10,7 +10,7 @@ class UsuarioDAO {
     public function cadastrarUsuario(Usuario $usuario){
         try {
             $conn = $this->db->getConnection();
-            $sql = "INSERT INTO usuarios (email, senha, tipo, idaluno) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO usuario (email, senha, tipo, idaluno) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$usuario->getEmail(), $usuario->getSenha(), $usuario->getTipo(), $usuario->getIdaluno()]);
             return true;
@@ -39,5 +39,20 @@ class UsuarioDAO {
 
     public function fecharSessao(){
         // Implementar lógica para encerrar sessão do usuário
+    }
+
+    public function pegarAlunoUsuario(Usuario $usuario){
+        try {
+            // Ajuste o nome da tabela/colunas conforme seu banco:
+            // Aqui assumimos uma tabela 'usuarios' com colunas: ra (matrícula), senha_hash, nome, role
+            $sql = 'SELECT a.idaluno, a.nome, a.idturma FROM usuario u inner join aluno a on u.idaluno = a.idaluno WHERE email = ? LIMIT 1';
+            $stmt = $this->db->getConnection()->prepare($sql);
+            $stmt->execute([$usuario->getEmail()]);
+            $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $aluno;
+        } catch (Exception $e) {
+            error_log('Iniciar sessão error: ' . $e->getMessage());
+            return null;
+        }
     }
 }

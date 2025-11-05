@@ -26,11 +26,20 @@ try {
             header('Location: index.php');
             exit;
         }
-
         // Redirecionar para área do usuário / admin
         if ($_SESSION['user']['tipo'] === 'administrador') {
             header('Location: app/view/admin/home_admin.html');
         } elseif ($_SESSION['user']['tipo'] === 'aluno') {
+            $aluno = $usuarioController->getAlunoUsuario($user);
+            $turmaController = new TurmaController();
+            $turma = new Turma();
+            $turma = $turmaController->procurarTurma($aluno['idturma']);
+            $mes = date('m');
+            $periodo = $turma['periodo'];
+            if ($mes == 1 || $mes == 7 && $periodo <= 6 ) {
+                $alunoController = new AlunoController;
+                $alunoController->atualizarTurma($aluno, $periodo);
+            }
             header('Location: app/view/usuario/home.html');
         }
         exit;

@@ -35,4 +35,13 @@ class UsuarioController {
             error_log("Erro ao encerrar sessão: " . $e->getMessage());
         }
     }
+
+    public function getAlunoUsuario(Usuario $usuario){
+        try {
+            return $this->usuarioDAO->pegarAlunoUsuario($usuario);
+        } catch (Exception $e) {
+            error_log("Erro ao buscar aluno: " . $e->getMessage());
+            return null;
+        }
+    }
 }
