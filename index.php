@@ -47,7 +47,7 @@ if (!empty($_SESSION['login_error'])) {
         <img src="assets/logo-sem-fundo.png" alt="Logo do sistema Eleja" class="mx-auto w-40" />
       </header>
 
-      <form action="login.php" method="post" class="text-left border px-8 py-6 rounded-lg shadow-md">
+      <form action="roteador.php?controller=Usuario&acao=login" method="post" class="text-left border px-8 py-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-semibold mb-4 text-center">Acesse para votar</h1>
 
         <label for="email" class="block mb-1">E-mail</label>

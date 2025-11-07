@@ -15,7 +15,7 @@ class AlunoDAO{
             $stmt->execute([$aluno->getNome(), $aluno->getIdturma()]);
             return true;
         } catch (\Throwable $th) {
-            error_log('Cadastrar aluno error: ' . $th->getMessage());
+            echo "<script>console.log('Cadastrar aluno error: " . $th->getMessage() . "');</script>";
             return false;
         }
         
@@ -30,7 +30,7 @@ class AlunoDAO{
             $idaluno = $stmt->fetchColumn();
             return $idaluno;
         } catch (\Throwable $th) {
-            error_log('Procurar aluno error: ' . $th->getMessage());
+            echo "<script>console.log('Procurar aluno error: " . $th->getMessage() . "');</script>";
             return null;
         }
         
@@ -45,21 +45,35 @@ class AlunoDAO{
             $idaluno = $stmt->fetchColumn();
             return $idaluno;
         } catch (\Throwable $th) {
-            error_log('Procurar aluno error: ' . $th->getMessage());
+            echo "<script>console.log('Procurar aluno error: " . $th->getMessage() . "');</script>";
             return null;
         }
-        
     }
+
+    public function procurarAlunoPorId(int $idaluno){
+        try {
+            $conn = $this->db->getConnection();
+            $sql = "SELECT * FROM aluno WHERE idaluno = ? LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$idaluno]);
+            $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $aluno;
+        } catch (\Throwable $th) {
+            echo "<script>console.log('Pegar aluno error: " . $th->getMessage() . "');</script>";
+            return null;
+        }
+    }
+    
 
     public function updateTurma(Aluno $aluno, int $periodo){
         try {
             $conn = $this->db->getConnection();
             $stmt = $conn->prepare('UPDATE aluno set idturma = ? where idaluno = ?');
-            $stmt->execute([$aluno->getIdturma(), $aluno->getIdaluno]);
+            $stmt->execute([$periodo, $aluno->getIdaluno()]);
             $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
             return $aluno;
         } catch (Exception $e) {
-            error_log('Localizar turma error: ' . $e->getMessage());
+            echo "<script>console.log('Localizar turma error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }

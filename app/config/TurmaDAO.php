@@ -14,7 +14,7 @@ class TurmaDAO{
             $stmt->execute([$turma->getPeriodo(), $turma->getCurso()]);
             return true;
         } catch (\Throwable $th) {
-            error_log('Cadastrar turma error: ' . $th->getMessage());
+            echo "<script>console.log('Cadastrar turma error: " . $th->getMessage() . "');</script>";
             return false;
         }
         
@@ -28,7 +28,7 @@ class TurmaDAO{
             $turma = $stmt->fetchColumn();
             return $turma;
         } catch (Exception $e) {
-            error_log('Localizar turma error: ' . $e->getMessage());
+            echo "<script>console.log('Localizar turma error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }
@@ -37,11 +37,11 @@ class TurmaDAO{
         try {
             $conn = $this->db->getConnection();
             $stmt = $conn->prepare('SELECT * FROM turma WHERE idturma = ? LIMIT 1');
-            $stmt->execute($idturma);
-            $turma = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$idturma]);
+            $turma = $stmt->fetchObject('Turma');
             return $turma;
         } catch (Exception $e) {
-            error_log('Localizar turma error: ' . $e->getMessage());
+            echo "<script>console.log('Localizar turma error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }

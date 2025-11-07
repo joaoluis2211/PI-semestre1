@@ -15,24 +15,33 @@ class UsuarioDAO {
             $stmt->execute([$usuario->getEmail(), $usuario->getSenha(), $usuario->getTipo(), $usuario->getIdaluno()]);
             return true;
         } catch (\Throwable $th) {
-            error_log('Cadastrar usuário error: ' . $th->getMessage());
+            echo "<script>console.log('Cadastrar usuário error: " . $th->getMessage() . "');</script>";
             return false;
         }
         // Implementar lógica para cadastrar usuário no banco de dados
         
     }
 
-    public function iniciarSessao(Usuario $usuario){
+    public function iniciarSessao(string $email, string $senha){
         try {
             // Ajuste o nome da tabela/colunas conforme seu banco:
             // Aqui assumimos uma tabela 'usuarios' com colunas: ra (matrícula), senha_hash, nome, role
-            $sql = 'SELECT idusuario, email, senha, tipo FROM usuario WHERE email = ? LIMIT 1';
+            $sql = 'SELECT * FROM usuario WHERE email = ? and senha = ? LIMIT 1';
             $stmt = $this->db->getConnection()->prepare($sql);
-            $stmt->execute([$usuario->getEmail()]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $user;
+            $stmt->execute([$email, $senha]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row > 0) {
+                $usuario = new Usuario();
+                $usuario->setId($row['idusuario']);
+                $usuario->setEmail($row['email']);
+                $usuario->setSenha($row['senha']);
+                $usuario->setTipo($row['tipo']);
+                $usuario->setIdaluno($row['idaluno'] ?? 0);
+                return $usuario;
+            }
+            return null;
         } catch (Exception $e) {
-            error_log('Iniciar sessão error: ' . $e->getMessage());
+            echo "<script>console.log('Iniciar sessão error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }
@@ -45,14 +54,26 @@ class UsuarioDAO {
         try {
             // Ajuste o nome da tabela/colunas conforme seu banco:
             // Aqui assumimos uma tabela 'usuarios' com colunas: ra (matrícula), senha_hash, nome, role
-            $sql = 'SELECT a.idaluno, a.nome, a.idturma FROM usuario u inner join aluno a on u.idaluno = a.idaluno WHERE email = ? LIMIT 1';
+            $sql = 'SELECT a.idaluno, a.nome, a.idturma FROM usuario u inner join aluno a on u.idaluno = a.idaluno WHERE a.idaluno = ? LIMIT 1';
             $stmt = $this->db->getConnection()->prepare($sql);
-            $stmt->execute([$usuario->getEmail()]);
-            $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$usuario->getIdaluno()]);
+            $aluno = $stmt->fetchObject('Aluno');
             return $aluno;
         } catch (Exception $e) {
-            error_log('Iniciar sessão error: ' . $e->getMessage());
+            echo "<script>console.log('Iniciar sessão error: " . $e->getMessage() . "');</script>";
             return null;
+        }
+    }
+
+    public function verificarEmailExiste($email){
+        try {
+            $sql = 'SELECT COUNT(*) FROM usuario WHERE email = ?';
+            $stmt = $this->db->getConnection()->prepare($sql);
+            $stmt->execute([$email]);
+            return $stmt->fetchColumn() > 0;
+        } catch (Exception $e) {
+            echo "<script>console.log('Verificar email error: " . $e->getMessage() . "');</script>";
+            return false;
         }
     }
 }

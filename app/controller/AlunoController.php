@@ -12,7 +12,7 @@ class AlunoController {
         try {
             $this->alunoDAO->cadastrarAluno($aluno);
         } catch (Exception $e) {
-            error_log("Erro ao cadastrar aluno: " . $e->getMessage());
+            echo "<script>console.log('Erro ao cadastrar aluno: " . $e->getMessage() . "');</script>";
         }
     }
 
@@ -20,7 +20,16 @@ class AlunoController {
         try {
             return $this->alunoDAO->procurarAluno($aluno);
         } catch (Exception $e) {
-            error_log("Erro ao buscar aluno: " . $e->getMessage());
+            echo "<script>console.log('Localizar idaluno error: " . $e->getMessage() . "');</script>";
+            return null;
+        }
+    }
+
+    public function getAluno(int $idaluno){
+        try {
+            return $this->alunoDAO->procurarAlunoPorId($idaluno);
+        } catch (Exception $e) {
+            echo "<script>console.log('Localizar aluno error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }
@@ -31,7 +40,7 @@ class AlunoController {
             $this->alunoDAO->updateTurma($aluno, $periodo);
             return true;
         } catch (Exception $e) {
-            error_log("Erro ao buscar turma: " . $e->getMessage());
+            echo "<script>console.log('Localizar turma error: " . $e->getMessage() . "');</script>";
             return null;
         }
     }
