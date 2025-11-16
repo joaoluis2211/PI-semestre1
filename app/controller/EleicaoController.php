@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__ . '/../config/CandidaturaDAO.php';
+require_once __DIR__ . '/../config/EleicaoDAO.php';
 require_once __DIR__ . '/CandidatoController.php';
-require_once __DIR__ . '/../model/Candidatura.php';
+require_once __DIR__ . '/../model/Eleicao.php';
 require_once __DIR__ . '/../model/Turma.php';
 require_once __DIR__ . '/TurmaController.php';
 
-class CandidaturaController {
-    private $candidaturaDAO;
+class EleicaoController {
+    private $eleicaoDAO;
     public function __construct() {
-        $this->candidaturaDAO = new CandidaturaDAO();
+        $this->eleicaoDAO = new EleicaoDAO();
     }
 
     public function cadastrar(){
@@ -20,30 +20,44 @@ class CandidaturaController {
             $turmaController = new TurmaController();
             $idturma = $turmaController->getIdTurma($turma);
 
-            $dataInicio = isset($_POST['dataInicio']) ? trim($_POST['dataInicio']) : '';
-            $dataFim = isset($_POST['dataFim']) ? trim($_POST['dataFim']) : '';
-            $candidatura = new Candidatura();
-            $candidatura->setDataInicio($dataInicio);
-            $candidatura->setDataFim($dataFim);
-            $candidatura->setIdturma($idturma);
+            $dataInicioCandidatura = isset($_POST['dataInicioCandidatura']) ? trim($_POST['dataInicioCandidatura']) : '';
+            $dataFimCandidatura = isset($_POST['dataFimCandidatura']) ? trim($_POST['dataFimCandidatura']) : '';
+            $dataInicioVotacao = isset($_POST['dataInicioVotacao']) ? trim($_POST['dataInicioVotacao']) : '';
+            $dataFimVotacao = isset($_POST['dataFimVotacao']) ? trim($_POST['dataFimVotacao']) : '';
+            $status = 'candidatura';
+            $eleicao = new Eleicao();
+            $eleicao->setDataInicioCandidatura($dataInicioCandidatura);
+            $eleicao->setDataFimCandidatura($dataFimCandidatura);
+            $eleicao->setDataInicioVotacao($dataInicioVotacao);
+            $eleicao->setDataFimVotacao($dataFimVotacao);
+            $eleicao->setStatus($status);
+            $eleicao->setIdturma($idturma);
             header("Location: app/view/admin/candidatar_admin.php");
-            return $this->candidaturaDAO->cadastrarCandidatura($candidatura);
+            return $this->eleicaoDAO->cadastrarEleicao($eleicao);
         } catch (Exception $e) {
-            echo "<script>console.log('Erro ao cadastrar candidatura: " . $e->getMessage() . "');</script>";
+            echo "<script>console.log('Erro ao cadastrar eleicao: " . $e->getMessage() . "');</script>";
         }
     }
 
     public function listarCandidaturas(){
         try {
-            return $this->candidaturaDAO->listarCandidaturas();
+            return $this->eleicaoDAO->listarCandidaturas();
         } catch (Exception $e) {
             echo "<script>console.log('Erro ao listar candidaturas: " . $e->getMessage() . "');</script>";
         }
     }
 
+    public function listarVotacoes(){
+        try {
+            return $this->eleicaoDAO->listarVotacoes();
+        } catch (Exception $e) {
+            echo "<script>console.log('Erro ao listar votacoes: " . $e->getMessage() . "');</script>";
+        }
+    }
+
     public function listarCandidaturasAbertas(){
         try {
-            return $this->candidaturaDAO->listarCandidaturasAbertas();
+            return $this->eleicaoDAO->listarCandidaturasAbertas();
         } catch (Exception $e) {
             echo "<script>console.log('Erro ao listar candidaturas abertas: " . $e->getMessage() . "');</script>";
             return [];
@@ -52,7 +66,7 @@ class CandidaturaController {
 
     public function listarCandidaturasAbertasPorTurma(int $idturma){
         try {
-            return $this->candidaturaDAO->listarCandidaturasAbertasPorTurma($idturma);
+            return $this->eleicaoDAO->listarCandidaturasAbertasPorTurma($idturma);
         } catch (Exception $e) {
             echo "<script>console.log('Erro ao listar candidaturas abertas por turma: " . $e->getMessage() . "');</script>";
             return [];
@@ -61,11 +75,11 @@ class CandidaturaController {
 
     public function excluir(){
         try {
-            $idcandidatura = $_POST['idcandidatura'] ?? null;
+            $ideleicao = $_POST['ideleicao'] ?? null;
             $candidatoController = new CandidatoController();
-            $resp = $candidatoController->deleteAll($idcandidatura);
+            $resp = $candidatoController->deleteAll($ideleicao);
             if ($resp) {
-                $resp2 = $this->candidaturaDAO->excluirCandidatura($idcandidatura);
+                $resp2 = $this->eleicaoDAO->excluirCandidatura($ideleicao);
                 if ($resp2) {
                     echo json_encode(['sucesso' => true]);
                 }else{

@@ -1,21 +1,21 @@
 <?php
 require_once __DIR__ . '/dbconection.php';
 
-class CandidaturaDAO{
+class EleicaoDAO{
     private $db;
     public function __construct() {
         $this->db = new Database();
     }
     
-    public function cadastrarCandidatura(Candidatura $candidatura){
+    public function cadastrarEleicao(Eleicao $eleicao){
         try {
             $conn = $this->db->getConnection();
-            $sql = "INSERT INTO candidatura (dataInicio, dataFim, idturma) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO eleicao (dataInicioCandidatura, dataFimCandidatura, dataInicioVotacao, dataFimVotacao, idturma, status) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->execute([$candidatura->getDataInicio(), $candidatura->getDataFim(), $candidatura->getIdturma()]);
+            $stmt->execute([$eleicao->getDataInicioCandidatura(), $eleicao->getDataFimCandidatura(), $eleicao->getDataFimVotacao(), $eleicao->getDataFimVotacao(), $eleicao->getIdturma(), $eleicao->getStatus()]);
             return true;
         } catch (\Throwable $th) {
-            echo "<script>console.log('Cadastrar candidatura error: " . $th->getMessage() . "');</script>";
+            echo "<script>console.log('Cadastrar eleicao error: " . $th->getMessage() . "');</script>";
             return false;
         }
     }
@@ -23,7 +23,7 @@ class CandidaturaDAO{
     public function listarCandidaturas(){
         try {
             $conn = $this->db->getConnection();
-            $sql = "SELECT c.idcandidatura, c.dataInicio, c.dataFim, c.idturma, t.semestre, t.curso FROM candidatura c INNER JOIN turma t ON c.idturma = t.idturma";
+            $sql = "SELECT e.ideleicao, e.dataInicioCandidatura, e.dataFimCandidatura, e.idturma, e.status, t.semestre, t.curso FROM eleicao e INNER JOIN turma t ON e.idturma = t.idturma where e.status = 'candidatura'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -67,12 +67,12 @@ class CandidaturaDAO{
         }
     }
 
-    public function excluirCandidatura(int $idcandidatura){
+    public function excluirCandidatura(int $ideleicao){
         try {
             $conn = $this->db->getConnection();
-            $sql = "DELETE FROM candidatura WHERE idcandidatura = ?";
+            $sql = "DELETE FROM eleicao WHERE ideleicao = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->execute([$idcandidatura]);
+            $stmt->execute([$ideleicao]);
             return true;
         } catch (\Throwable $th) {
             echo "<script>console.log('Excluir candidatura error: " . $th->getMessage() . "');</script>";

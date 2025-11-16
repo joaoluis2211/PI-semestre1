@@ -49,7 +49,7 @@ session_start();
                 <li><a class="hover:text-black" href="regulamento_admin.html">Regulamento</a></li>
                 <li><a class="hover:text-black" href="notificacao_admin.html">Notificações</a></li>
             </ul>
-            <a class="hover:text-black text-white text-xl absolute right-6" href="../../../index.html">Sair</a>
+            <a class="hover:text-black text-white text-xl absolute right-6" href="../../../index.php">Sair</a>
         </div>
     </nav>
     
@@ -66,18 +66,18 @@ session_start();
 
             <h2 class="m-auto text-3xl font-bold mb-5">Candidaturas</h2>
             <?php
-            require_once __DIR__ . '/../../controller/CandidaturaController.php';
-            $candidaturaController = new CandidaturaController();
-            $candidaturas = $candidaturaController->listarCandidaturas();
+            require_once __DIR__ . '/../../controller/EleicaoController.php';
+            $eleicaoController = new EleicaoController();
+            $candidaturas = $eleicaoController->listarCandidaturas();
             foreach ($candidaturas as $candidatura):
             ?>
-            <div id="candidatura-<?= $candidatura['idcandidatura'] ?>" class="flex flex-col border px-12 py-6 shadow-md mb-10 w-max mx-auto min-h-[200px]">
+            <div id="candidatura-<?= $candidatura['ideleicao'] ?>" class="flex flex-col border px-12 py-6 shadow-md mb-10 w-max mx-auto min-h-[200px]">
                 <h2 class="text-2xl font-semibold mb-1">Candidatura para representante de sala do <?= htmlspecialchars($candidatura['semestre']) ?>º Semestre / 
             <?= htmlspecialchars($candidatura['curso']) ?></h2>
-                <p class="mx-auto mb-8">Disponível até: <?= date('d/m/Y', strtotime($candidatura['dataFim'])) ?> 19:45</p>
+                <p class="mx-auto mb-8">Disponível até: <?= date('d/m/Y', strtotime($candidatura['dataFimCandidatura'])) ?> 19:45</p>
                 <div class="flex">
-                    <button data-candidatura="<?= htmlspecialchars($candidatura['idcandidatura']) ?>" class="excluirCandidatura mx-auto w-max p-3 rounded-lg bg-white outline border-gray-300 text-xl font-semibold text-gray-300 mt-auto" type="button">EXCLUIR CANDIDATURA</button>
-                    <button  data-candidatura="<?= htmlspecialchars($candidatura['idcandidatura']) ?>" class="votar mx-auto w-max p-3 rounded-lg bg-[#b20000] hover:bg-red-600 text-xl font-semibold text-white mt-auto" data-modal="modal-candidatos" type="button">VIZUALIZAR CANDIDATURA</button>
+                    <button data-ideleicao="<?= htmlspecialchars($candidatura['ideleicao']) ?>" class="excluirCandidatura mx-auto w-max p-3 rounded-lg bg-white outline border-gray-300 text-xl font-semibold text-gray-300 mt-auto" type="button">EXCLUIR CANDIDATURA</button>
+                    <button  data-ideleicao="<?= htmlspecialchars($candidatura['ideleicao']) ?>" class="votar mx-auto w-max p-3 rounded-lg bg-[#b20000] hover:bg-red-600 text-xl font-semibold text-white mt-auto" data-modal="modal-candidatos" type="button">VIZUALIZAR CANDIDATURA</button>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -97,7 +97,7 @@ session_start();
             </div>
 
             <div class="flex gap-4 overflow-x-auto pl-4 pr-4 scroll-pl-4 snap-x">
-                <form action="../../../roteador.php?controller=Candidatura&acao=cadastrar" class="flex flex-col w-full" method="post">
+                <form action="../../../roteador.php?controller=Eleicao&acao=cadastrar" class="flex flex-col w-full" method="post">
 
                     <label for="curso" class="block mb-1">Curso:</label>
                     <select class="w-full px-4 py-3 border border-gray-300 rounded mb-4" name="curso">
@@ -116,11 +116,18 @@ session_start();
                         <option value="6">6º Semestre</option>
                     </select>
 
-                    <label for="dataInicio" class="text-lg">Data de Início:</label>
-                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataInicio" required>
+                    <label for="dataInicioCandidatura" class="text-lg">Data de Início da candidatura:</label>
+                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataInicioCandidatura" required>
 
-                    <label for="dataFim" class="text-lg">Data de Fechamento:</label>
-                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataFim" required>
+                    <label for="dataFimCandidatura" class="text-lg">Data de Fechamento da candidatura:</label>
+                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataFimCandidatura" required>
+
+                    <label for="dataFimVotacao" class="text-lg">Data de Início da votação:</label>
+                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataFimVotacao" required>
+
+                    <label for="dataFimVotacao" class="text-lg">Data de Fechamento da votação:</label>
+                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded mb-4" name="dataFimVotacao" required>
+
                     <button type="submit" class=" mx-auto w-[16rem] py-3 rounded-lg bg-[#b20000] hover:bg-red-600 text-xl font-semibold text-white">Criar</button>
                 </form>
             </div>

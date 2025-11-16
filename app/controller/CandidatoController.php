@@ -11,10 +11,10 @@ class CandidatoController {
     public function cadastrar(){
         try {
             $idaluno = $_POST['idaluno'] ?? null;
-            $idcandidatura = $_POST['idcandidatura'] ?? null;
+            $ideleicao = $_POST['ideleicao'] ?? null;
             $candidato = new Candidato();
             $candidato->setIdaluno($idaluno);
-            $candidato->setIdcandidatura($idcandidatura);
+            $candidato->setIdeleicao($ideleicao);
             $candidato->setQtdVotos(0);
             $this->candidatoDAO->cadastrarCandidato($candidato);
             echo json_encode(['sucesso' => true]);
@@ -26,11 +26,11 @@ class CandidatoController {
     public function remover(){
         try {
             $idaluno = $_POST['idaluno'] ?? null;
-            $idcandidatura = $_POST['idcandidatura'] ?? null;
+            $ideleicao = $_POST['ideleicao'] ?? null;
 
             $candidato = new Candidato();
             $candidato->setIdaluno($idaluno);
-            $candidato->setIdcandidatura($idcandidatura);
+            $candidato->setIdeleicao($ideleicao);
             $this->candidatoDAO->removerCandidato($candidato);
             echo json_encode(['sucesso' => true]);
         } catch (Exception $e) {
@@ -38,9 +38,9 @@ class CandidatoController {
         }
     }
 
-    public function deleteAll(int $idcandidatura){
+    public function deleteAll(int $ideleicao){
         try {
-            return $this->candidatoDAO->removerAllCandidatos($idcandidatura);
+            return $this->candidatoDAO->removerAllCandidatos($ideleicao);
         } catch (Exception $e) {
             echo "<script>console.log('Erro ao remover candidatos: " . $e->getMessage() . "');</script>";
         }
@@ -48,9 +48,9 @@ class CandidatoController {
 
     public function listar() {
         try {
-            $idcandidatura = $_POST['idcandidatura'] ?? null;
+            $ideleicao = $_POST['ideleicao'] ?? null;
 
-            $candidatos = $this->candidatoDAO->listarCandidatos($idcandidatura);
+            $candidatos = $this->candidatoDAO->listarCandidatos($ideleicao);
 
             echo json_encode([
                 'sucesso' => true,
@@ -65,9 +65,9 @@ class CandidatoController {
         }
     }
 
-    public function verificarCandidaturaExistente($idaluno, $idcandidatura){
+    public function verificarCandidaturaExistente($idaluno, $ideleicao){
         try {
-            return $this->candidatoDAO->verificarCandidaturaExistente($idaluno, $idcandidatura);
+            return $this->candidatoDAO->verificarCandidaturaExistente($idaluno, $ideleicao);
         } catch (Exception $e) {
             echo "<script>console.log('Erro ao verificar candidato existente: " . $e->getMessage() . "');</script>";
         }

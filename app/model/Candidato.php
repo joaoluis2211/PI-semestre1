@@ -3,7 +3,7 @@
 class Candidato
 {
     private int $idcandidato;
-    private int $idcandidatura;
+    private int $ideleicao;
     private int $idaluno;
     private int $qtdVotos = 0;
 
@@ -28,14 +28,14 @@ class Candidato
         $this->idcandidato = $idcandidato;
     }
 
-    public function getIdCandidatura(): int
+    public function getIdeleicao(): int
     {
-        return $this->idcandidatura;
+        return $this->ideleicao;
     }
 
-    public function setIdcandidatura(int $idcandidatura): void
+    public function setIdeleicao(int $ideleicao): void
     {
-        $this->idcandidatura = $idcandidatura;
+        $this->ideleicao = $ideleicao;
     }
 
     public function getQtdVotos(): int

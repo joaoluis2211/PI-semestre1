@@ -61,30 +61,30 @@
         <div class="flex flex-col w-full min-h-max border-gray-400 justify-center mb-8">
 
             <?php
-            require_once __DIR__ . '/../../controller/CandidaturaController.php';
+            require_once __DIR__ . '/../../controller/EleicaoController.php';
             require_once __DIR__ . '/../../controller/CandidatoController.php';
             require_once __DIR__ . '/../../controller/AlunoController.php';
             require_once __DIR__ . '/../../model/Usuario.php';
             session_start();
             $usuario = $_SESSION['user'];
 
-            $candidaturaController = new CandidaturaController();
-            $candidaturas = $candidaturaController->listarCandidaturas();
+            $eleicaoController = new EleicaoController();
+            $candidaturas = $eleicaoController->listarCandidaturas();
             $alunoController = new AlunoController();
             $candidatoController = new CandidatoController();
             $aluno = $alunoController->getAluno($usuario->getIdaluno());
             $idturma = $aluno->getIdturma();
             foreach ($candidaturas as $candidatura):
                 if ($candidatura['idturma'] == $idturma):
-                    $jaCandidatado = $candidatoController->verificarCandidaturaExistente($aluno->getIdaluno(), $candidatura['idcandidatura']);
+                    $jaCandidatado = $candidatoController->verificarCandidaturaExistente($aluno->getIdaluno(), $candidatura['ideleicao']);
             ?>
             <div class="flex flex-col border px-12 py-6 shadow-md mb-10 w-max mx-auto min-h-[200px]">
                 <h2 class="text-2xl font-semibold mb-1">Candidatura para representante de sala do <?= htmlspecialchars($candidatura['semestre']) ?>º Semestre / 
             <?= htmlspecialchars($candidatura['curso']) ?></h2>
-                <p class="mx-auto mb-4">Disponível até: <?= date('d/m/Y', strtotime($candidatura['dataFim'])) ?> 19:45</p>
+                <p class="mx-auto mb-4">Disponível até: <?= date('d/m/Y', strtotime($candidatura['dataFimCandidatura'])) ?> 19:45</p>
                 <button id="btnCandidatar"
                     data-aluno="<?= htmlspecialchars($aluno->getIdaluno()) ?>"
-                    data-candidatura="<?= htmlspecialchars($candidatura['idcandidatura']) ?>"
+                    data-eleicao="<?= htmlspecialchars($candidatura['ideleicao']) ?>"
                     data-candidatado=<?= $jaCandidatado ? 'true' : 'false'?>
                     class="mx-auto w-[14rem] py-4 rounded-lg text-xl font-semibold text-white mt-auto
                     <?= $jaCandidatado ? 'bg-gray-600 hover:bg-gray-700' : 'bg-[#b20000] hover:bg-red-600' ?>"

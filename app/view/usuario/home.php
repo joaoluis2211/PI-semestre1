@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controller/CandidaturaController.php';
+require_once __DIR__ . '/../../controller/EleicaoController.php';
 require_once __DIR__ . '/../../controller/VotacaoController.php';
 require_once __DIR__ . '/../../controller/AlunoController.php';
 require_once __DIR__ . '/../../model/Usuario.php';
@@ -13,7 +13,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $usuario = $_SESSION['user'];
-$candidaturaController = new CandidaturaController();
+$eleicaoController = new EleicaoController();
 $votacaoController = new VotacaoController();
 $alunoController = new AlunoController();
 
@@ -26,7 +26,7 @@ $candidaturasAbertas = [];
 $votacoesAbertas = [];
 
 if ($idturma) {
-    $candidaturasAbertas = $candidaturaController->listarCandidaturasAbertasPorTurma($idturma);
+    $candidaturasAbertas = $eleicaoController->listarCandidaturasAbertasPorTurma($idturma);
     $votacoesAbertas = $votacaoController->listarVotacoesAbertasPorTurma($idturma);
 }
 

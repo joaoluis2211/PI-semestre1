@@ -24,29 +24,24 @@ idaluno int null,
 constraint fk_aluno_usuario foreign key (idaluno) references aluno (idaluno)
 );
 
-create table candidatura(
-idcandidatura int primary key auto_increment not null,
-dataInicio date not null,
-dataFim date not null,
+create table eleicao(
+ideleicao int primary key auto_increment not null,
+dataInicioCandidatura date not null,
+dataFimCandidatura date not null,
+dataInicioVotacao date not null,
+dataFimVotacao date not null,
 idturma int not null,
-constraint fk_turma_candidatura foreign key (idturma) references turma (idturma)
-);
-
-create table votacao(
-idvotacao int primary key auto_increment not null,
-dataIncio date not null,
-dataFim date not null,
-idcandidatura int not null,
-constraint fk_candidatura_votacao foreign key (idcandidatura) references candidatura (idcandidatura)
+status varchar(60) not null,
+constraint fk_turma_eleicao foreign key (idturma) references turma (idturma)
 );
 
 create table candidato(
 idcandidato int primary key auto_increment not null,
 idaluno int not null,
-idcandidatura int not null,
+ideleicao int not null,
 qtdVotos int not null,
 constraint fk_aluno_candidato foreign key (idaluno) references aluno (idaluno),
-constraint fk_candidatura_candidato foreign key (idcandidatura) references candidatura (idcandidatura)
+constraint fk_eleicao_candidato foreign key (ideleicao) references eleicao (ideleicao)
 );
 
 create table ata(
@@ -54,8 +49,8 @@ idata int primary key auto_increment not null,
 presidente varchar(60) not null,
 vice varchar(60) not null,
 totalVoto int not null,
-idvotacao int not null,
-constraint fk_votacao_ata foreign key (idvotacao) references votacao (idvotacao)
+ideleicao int not null,
+constraint fk_eleicao_ata foreign key (ideleicao) references eleicao (ideleicao)
 );
 
 create table voto(

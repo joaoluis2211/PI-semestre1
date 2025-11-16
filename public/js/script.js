@@ -4,7 +4,7 @@ const btnVotar = document.querySelectorAll('.votar');
 btnVotar.forEach(button => {
     button.addEventListener('click', () =>{
         const botao = button;
-        const idcandidatura = botao.dataset.candidatura;
+        const ideleicao = botao.dataset.ideleicao;
         const modalId = button.getAttribute('data-modal');
         const modal = document.getElementById(modalId);
 
@@ -13,7 +13,7 @@ btnVotar.forEach(button => {
         fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-          body: new URLSearchParams({idcandidatura})
+          body: new URLSearchParams({ideleicao})
         })
         .then(res => res.json())
         .then(data => {
@@ -338,7 +338,7 @@ document.getElementById('btnCandidatar').addEventListener('click', function() {
   const btn = this;
   const acao = btn.dataset.candidatado === "true" ? "remover" : "cadastrar";
   const idaluno = btn.dataset.aluno;
-  const idcandidatura = btn.dataset.candidatura;
+  const ideleicao = btn.dataset.eleicao;
 
   // URL chama o roteador
   const url = `/PI-semestre1/roteador.php?controller=Candidato&acao=${acao}`;
@@ -346,7 +346,7 @@ document.getElementById('btnCandidatar').addEventListener('click', function() {
    fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({ idaluno, idcandidatura })
+    body: new URLSearchParams({ idaluno, ideleicao })
   })
   .then(res => res.json())
   .then(data => {
@@ -386,19 +386,19 @@ const btnExcluirCandidatura = document.querySelectorAll('.excluirCandidatura');
 btnExcluirCandidatura.forEach(button => {
     button.addEventListener('click', () =>{
         const botao = button;
-        const idcandidatura = botao.dataset.candidatura;
+        const ideleicao = botao.dataset.ideleicao;
 
-        const url = `/PI-semestre1/roteador.php?controller=Candidatura&acao=excluir`;
+        const url = `/PI-semestre1/roteador.php?controller=Eleicao&acao=excluir`;
   
         fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-          body: new URLSearchParams({idcandidatura})
+          body: new URLSearchParams({ideleicao})
         })
         .then(res => res.json())
         .then(data => {
           if (data.sucesso) {
-            const card = document.getElementById(`candidatura-${idcandidatura}`);
+            const card = document.getElementById(`candidatura-${ideleicao}`);
             if (card) card.remove();
             mostrarModal('Excluido com sucesso.');
           } else {
