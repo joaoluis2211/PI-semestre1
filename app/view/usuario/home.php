@@ -146,3 +146,4 @@ $temAlgoAberto = $temCandidaturasAbertas || $temVotacoesAbertas;
 
 
 
+
