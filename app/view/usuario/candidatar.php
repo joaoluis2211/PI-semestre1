@@ -69,14 +69,13 @@
             $usuario = $_SESSION['user'];
 
             $eleicaoController = new EleicaoController();
-            $candidaturas = $eleicaoController->listarCandidaturas();
             $alunoController = new AlunoController();
             $candidatoController = new CandidatoController();
             $aluno = $alunoController->getAluno($usuario->getIdaluno());
             $idturma = $aluno->getIdturma();
+            $candidaturas = $eleicaoController->listarCandidaturasAbertasPorTurma($idturma);
             foreach ($candidaturas as $candidatura):
-                if ($candidatura['idturma'] == $idturma):
-                    $jaCandidatado = $candidatoController->verificarCandidaturaExistente($aluno->getIdaluno(), $candidatura['ideleicao']);
+                $jaCandidatado = $candidatoController->verificarCandidaturaExistente($aluno->getIdaluno(), $candidatura['ideleicao']);
             ?>
             <div class="flex flex-col border px-12 py-6 shadow-md mb-10 w-max mx-auto min-h-[200px]">
                 <h2 class="text-2xl font-semibold mb-1">Candidatura para representante de sala do <?= htmlspecialchars($candidatura['semestre']) ?>º Semestre / 
@@ -91,7 +90,6 @@
                     type="button"><?= $jaCandidatado ? 'REMOVER CANDIDATURA' : 'CANDIDATAR-SE'?></button>
             </div>
             <?php
-                endif;
             endforeach;
             ?>
         </div>

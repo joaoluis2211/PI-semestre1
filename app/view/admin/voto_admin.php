@@ -115,7 +115,7 @@ session_start();
 
             <div class="flex gap-4 overflow-x-auto pb-3 pl-4 pr-4 scroll-pl-4 snap-x">
 
-                <div id="listaCandidatos" class="flex m-auto">
+                <div id="listaCandidatos" class="flex m-auto gap-4">
                 </div>
 
             </div>

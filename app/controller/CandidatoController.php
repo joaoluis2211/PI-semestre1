@@ -72,4 +72,21 @@ class CandidatoController {
             echo "<script>console.log('Erro ao verificar candidato existente: " . $e->getMessage() . "');</script>";
         }
     }
+
+    public function adicionarVoto(Candidato $candidato){
+        try {
+            return $this->candidatoDAO->adicionarVoto($candidato);
+        } catch (Exception $e) {
+            echo "<script>console.log('Erro ao adicionar voto: " . $e->getMessage() . "');</script>";
+        }
+    }
+
+    public function getCandidato(int $idcandidato){
+        try {
+            return $this->candidatoDAO->procurarCandidatoPorId($idcandidato);
+        } catch (Exception $e) {
+            echo "<script>console.log('Localizar candidato error: " . $e->getMessage() . "');</script>";
+            return null;
+        }
+    }
 }

@@ -36,7 +36,7 @@ class CandidatoDAO{
     public function listarCandidatos(int $ideleicao){
         try {
             $conn = $this->db->getConnection();
-            $sql = "SELECT a.nome, c.qtdVotos FROM candidato c INNER JOIN aluno a ON c.idaluno = a.idaluno where c.ideleicao = ?";
+            $sql = "SELECT a.nome, c.qtdVotos, c.idcandidato FROM candidato c INNER JOIN aluno a ON c.idaluno = a.idaluno where c.ideleicao = ?";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$ideleicao]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -70,6 +70,33 @@ class CandidatoDAO{
         } catch (\Throwable $th) {
             echo "<script>console.log('Excluir all candidatos error: " . $th->getMessage() . "');</script>";
             return false;
+        }
+    }
+    
+    public function adicionarVoto(Candidato $candidato){
+        try {
+            $conn = $this->db->getConnection();
+            $sql = "UPDATE candidato SET qtdVotos = ? WHERE idcandidato = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$candidato->getQtdVotos(), $candidato->getIdcandidato()]);
+            return true;
+        } catch (\Throwable $th) {
+            echo "<script>console.log('Excluir all candidatos error: " . $th->getMessage() . "');</script>";
+            return false;
+        }
+    }
+
+    public function procurarCandidatoPorId(int $idcandidato){
+        try {
+            $conn = $this->db->getConnection();
+            $sql = "SELECT * FROM candidato WHERE idcandidato = ? LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$idcandidato]);
+            $candidato = $stmt->fetchObject('Candidato');
+            return $candidato;
+        } catch (\Throwable $th) {
+            echo "<script>console.log('Pegar candidato error: " . $th->getMessage() . "');</script>";
+            return null;
         }
     }
 }

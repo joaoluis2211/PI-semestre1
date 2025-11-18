@@ -3,6 +3,7 @@ const btnVotar = document.querySelectorAll('.votar');
 
 btnVotar.forEach(button => {
     button.addEventListener('click', () =>{
+        window.candidatoSelecionado = null;
         const botao = button;
         const ideleicao = botao.dataset.ideleicao;
         const modalId = button.getAttribute('data-modal');
@@ -21,6 +22,7 @@ btnVotar.forEach(button => {
           if (data.sucesso && data.candidatos) {
               // Preenche o modal com os candidatos
               const listaCandidatos = document.getElementById('listaCandidatos');
+              listaCandidatos.innerHTML = "";
 
               data.candidatos.forEach(candidato => {
                 const card = document.createElement('div');
@@ -36,7 +38,31 @@ btnVotar.forEach(button => {
                   card.appendChild(votos);
                 }
 
-                
+                if (tipo === "VOTAR") {
+                  const radio = document.createElement('input');
+                  radio.type = "radio";
+                  radio.name = "candidatoEscolhido"; // só permite 1 selecionado
+                  radio.value = candidato.idcandidato;
+                  radio.className = "w-4 h-4 text-red-600";
+                  
+                  // quando clicar, salvar o id do candidato escolhido
+                  radio.addEventListener('change', () => {
+                      window.candidatoSelecionado = radio.value;
+                  });
+
+                  // rótulo com texto "Selecione"
+                  const label = document.createElement('label');
+                  label.textContent = "Selecione";
+                  label.className = "text-black text-lg font-medium";
+
+                  const wrap = document.createElement('div');
+                  wrap.className = "flex items-center gap-1";
+                  wrap.appendChild(radio);
+                  wrap.appendChild(label);
+
+                  card.appendChild(wrap);
+                }
+
                 listaCandidatos.appendChild(card);
               });
 
@@ -61,6 +87,52 @@ btnVotar.forEach(button => {
       return div.innerHTML;
     }
 }
+
+
+function confirmarVoto(){
+const btnConfirmarVoto = document.querySelectorAll('.confirmarVoto');
+
+btnConfirmarVoto.forEach(button => {
+    button.addEventListener('click', () =>{
+        const botao = button;
+        const idaluno = botao.dataset.idaluno;
+        const idcandidato = window.candidatoSelecionado;
+        const modalId = botao.getAttribute('data-modal');
+        const modal = document.getElementById(modalId);
+       
+        if (!idcandidato) {
+          alert("Selecione um candidato!");
+          return;
+        }
+
+        const url = `/PI-semestre1/roteador.php?controller=Voto&acao=votar`;
+  
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({idcandidato, idaluno})
+        })
+        .then(res => res.json())
+        .then(data => {
+          modal.close();
+          if (data.sucesso) {
+            mostrarModal('Voto efetuado com sucesso!');
+          } else {
+            mostrarModal('Falha ao votar');
+          }
+        })
+        .catch((err) => {
+          console.error('Erro:', err);
+          mostrarModal('error');
+        });
+        });
+    });
+    function mostrarModal(msg) {
+      document.getElementById('mensagemModal').innerText = msg;
+      document.getElementById('modalConfirmacao').style.display = 'flex';
+    }
+}
+
 
 const btnCandidatar = document.querySelectorAll('.candidatar')
 
@@ -386,6 +458,7 @@ function mostrarModal(msg) {
 
 function fecharModal() {
   document.getElementById('modalConfirmacao').style.display = 'none';
+  location.reload();
 }
 
 

@@ -54,7 +54,7 @@ class EleicaoDAO{
         try {
             $conn = $this->db->getConnection();
             $dataAtual = date('Y-m-d');
-            $sql = "SELECT e.ideleicao, e.dataInicioCandidatura, e.dataFimCandidatura, e.idturma, t.semestre, t.curso 
+            $sql = "SELECT e.ideleicao, e.dataInicioCandidatura, e.dataFimCandidatura, e.idturma, e.status, t.semestre, t.curso 
                     FROM eleicao e 
                     INNER JOIN turma t ON e.idturma = t.idturma
                     WHERE e.dataInicioCandidatura <= ? AND e.dataFimCandidatura >= ? AND e.idturma = ?";
@@ -72,7 +72,7 @@ class EleicaoDAO{
             $conn = $this->db->getConnection();
             $dataAtual = date('Y-m-d');
             $sql = "SELECT e.ideleicao, e.dataInicioVotacao, e.dataFimVotacao, 
-                           e.idturma, t.semestre, t.curso 
+                           e.idturma, e.status, t.semestre, t.curso 
                     FROM eleicao e  
                     INNER JOIN turma t ON e.idturma = t.idturma
                     WHERE e.dataInicioVotacao <= ? AND e.dataFimVotacao >= ? AND e.idturma = ?";
